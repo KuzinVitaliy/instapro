@@ -3,6 +3,12 @@ import { renderHeaderComponent } from "./header-component.js";
 import { posts, goToPage, getToken } from "../index.js";
 import { ChangeLikeAsync } from "../api.js";
 
+//import { formatDistance } from "../node_modules/date-fns";
+
+function formatDistance(a, s) {
+  return a;
+}
+
 export function renderPostsPageComponent({ appEl }) {
   // @TODO: реализовать рендер постов из api
 
@@ -66,6 +72,7 @@ function GetPostHtml(post) {
   if (post.isLiked) likeImage = "like-active.svg";
 
   let postDateText = post.createdAt;
+  postDateText = formatDistance(post.createdAt, Date.now);
   return `<li class="post">
                     <div class="post-header" data-user-id="${post.user.id}">
                         <img src="${
