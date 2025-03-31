@@ -1,6 +1,7 @@
 import { USER_POSTS_PAGE } from "../routes.js";
 import { renderHeaderComponent } from "./header-component.js";
-import { posts, goToPage } from "../index.js";
+import { posts, goToPage, getToken } from "../index.js";
+import { ChangeLikeAsync } from "../api.js";
 
 export function renderPostsPageComponent({ appEl }) {
   // @TODO: реализовать рендер постов из api
@@ -33,6 +34,31 @@ export function renderPostsPageComponent({ appEl }) {
       });
     });
   }
+  for (let userEl of document.querySelectorAll(".like-button")) {
+    userEl.addEventListener("click", async () => {
+      console.log(userEl.dataset.isliked);
+      console.log(userEl.dataset.postId);
+
+      let res = await ChangeLikeAsync(
+        userEl.dataset.postId,
+        userEl.dataset.isliked == "false",
+        getToken()
+      );
+      if (res) {
+        if (userEl.dataset.isliked == "false") {
+          userEl.innerHTML = `<img src="./assets/images/like-active.svg">`;
+          userEl.dataset.isliked = "true";
+        } else {
+          userEl.innerHTML = `<img src="./assets/images/like-not-active.svg">`;
+          userEl.dataset.isliked = "false";
+        }
+      }
+      /*      let postId = userEl.dataset.postId;
+      let url = `http://localhost:3000/api/posts/${postId}`;
+      fetch(url, {
+    */
+    });
+  }
 }
 
 function GetPostHtml(post) {
@@ -53,7 +79,7 @@ function GetPostHtml(post) {
                       <img class="post-image" src="${post.imageUrl}">
                     </div>
                     <div class="post-likes">
-                      <button data-post-id="${post.postId}" data-isLiked="${
+                      <button data-post-id="${post.id}" data-isLiked="${
     post.isLiked
   }" class="like-button">
                         <img src="./assets/images/${likeImage}">

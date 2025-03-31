@@ -25,7 +25,7 @@ export let user = getUserFromLocalStorage();
 export let page = null;
 export let posts = [];
 
-const getToken = () => {
+export const getToken = () => {
   const token = user ? `Bearer ${user.token}` : undefined;
   return token;
 };
@@ -118,7 +118,7 @@ const renderApp = () => {
       appEl,
       onAddPostClick({ imageUrl, description }) {
         // @TODO: реализовать добавление поста в API
-        saveCommentApiAsync(imageUrl, description);
+        saveCommentApiAsync(imageUrl, description, getToken());
         console.log("Добавляю пост...", { description, imageUrl });
         goToPage(POSTS_PAGE);
       },

@@ -1,7 +1,10 @@
 // Замени на свой, чтобы получить независимый от других набор данных.
 // "боевая" версия инстапро лежит в ключе prod
-const personalKey = "prod";
-const baseHost = "https://webdev-hw-api.vercel.app";
+//const personalKey = "prod";
+const personalKey = "vk";
+//const baseHost = "https://webdev-hw-api.vercel.app";
+const baseHost = "https://wedev-api.sky.pro";
+//const baseHost = "https://glebkaf.github.io";
 const postsHost = `${baseHost}/api/v1/${personalKey}/instapro`;
 
 export function getPosts({ token }) {
@@ -23,7 +26,7 @@ export function getPosts({ token }) {
     });
 }
 
-export function getUserPosts({ token , userid}) {
+export function getUserPosts({ token, userid }) {
   return fetch(postsHost + `/user-posts/${userid}`, {
     method: "GET",
     headers: {
@@ -85,7 +88,7 @@ export async function loginUserAsync({ login, password }) {
 
 //#endregion
 
-export function saveCommentApi(file, comment) {
+export function saveCommentApi(file, comment, token) {
   return uploadImage(file).then((response) => {
     if (response.status === 200) {
       let js = response.json;
@@ -93,7 +96,7 @@ export function saveCommentApi(file, comment) {
   });
 }
 
-export async function saveCommentApiAsync(file, comment) {
+export async function saveCommentApiAsync(file, comment, token) {
   try {
     let res = await uploadImageAsync(file);
     if (res.success) {
@@ -101,6 +104,9 @@ export async function saveCommentApiAsync(file, comment) {
       let response = await fetch(postsHost, {
         method: "POST",
         body: JSON.stringify({ description: comment, imageUrl: js }),
+        headers: {
+          Authorization: token,
+        },
       });
       if (response.status === 401) {
         throw new Error("Нет авторизации");
@@ -128,7 +134,55 @@ export function uploadImage(file) {
     })
     .then((data) => {
       console.log(data.fileUrl);
+    })
+    .catch((error) => {
+      console.log(error);
     });
+}
+
+export async function ChangeLike(postId, setLiked, token) {
+  return fetch(postsHost + `/${postId}/${!setLiked ? "like" : "dislike"}`, {
+    method: "POST",
+    headers: {
+      Authorization: token,
+    },
+  }).then((response) => {
+    if (response.status === 200) {
+      console.log("Изменение like -  OK");
+      return true;
+    }
+    if (response.status === 401) {
+      throw new Error("Нет авторизации");
+    } else {
+      console.log("Изменение like - Error");
+      return false;
+    }
+  });
+}
+
+export async function ChangeLikeAsync(postId, setLiked, token) {
+  let host = postsHost + `/${postId}/${setLiked ? "like" : "dislike"}`;
+  let response = await fetch(
+    postsHost + `/${postId}/${setLiked ? "like" : "dislike"}`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: token,
+      },
+    }
+  );
+  if (response.status === 200) {
+    console.log("Изменение like -  OK");
+    return true;
+  }
+  if (response.status === 401) {
+    throw new Error("Нет авторизации");
+  } else {
+    console.log("Изменение like - Error");
+    let body = await response.body;
+    let content = await response.json();
+    return false;
+  }
 }
 
 export async function uploadImageAsync(file) {

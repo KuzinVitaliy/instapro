@@ -1,9 +1,10 @@
+import { renderHeaderText } from "./header-component.js";
 export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
   const render = () => {
     // @TODO: Реализовать страницу добавления поста
     const appHtml = `
     <div class="page-container">
-      <div class="header-container"></div>
+      <div class="header-container"></div> ${renderHeaderText()}
       Страница добавления поста
           <p><img id="output" width="200"/></p>
 
@@ -17,7 +18,8 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
         style="display: none"
       />
     </p>
-        <p><label for="file" style="cursor: pointer">Upload Image</label></p>
+       <p><label for="file" style="cursor: pointer">Загрузить изображение</label></p>
+       <p><label for="file" style="cursor: pointer">Комментарий к картинке</label></p>
        <input type="texts" id="comment" />
       <button class="button" id="add-button">Добавить</button>
     </div>
