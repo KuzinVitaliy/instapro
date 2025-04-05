@@ -3,9 +3,9 @@ import { renderHeaderComponent } from "./header-component.js";
 import { posts, goToPage, getToken } from "../index.js";
 import { ChangeLikeAsync } from "../api.js";
 
-//import { formatDistance } from "../node_modules/date-fns";
+import { formatDistance } from "../node_modules/date-fns/formatDistance.js";
 
-function formatDistance(a, s) {
+function formatDistanceF(a, s) {
   return a;
 }
 
@@ -47,8 +47,9 @@ export function renderPostsPageComponent({ appEl }) {
       let likeCountElement = document.getElementById(
         `LK${userEl.dataset.postId}`
       );
-      let likeCount = Number( likeCountElement.innerText.replace("Нравится: ","").trim());
-      
+      let likeCount = Number(
+        likeCountElement.innerText.replace("Нравится: ", "").trim()
+      );
 
       let res = await ChangeLikeAsync(
         userEl.dataset.postId,
