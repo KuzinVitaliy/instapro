@@ -4,6 +4,7 @@ import { posts, goToPage, getToken } from "../index.js";
 import { ChangeLikeAsync } from "../api.js";
 
 import { formatDistance } from "../node_modules/date-fns/formatDistance.js";
+import { ru } from "../node_modules/date-fns/locale/ru.js";
 
 function formatDistanceF(a, s) {
   return a;
@@ -81,7 +82,10 @@ function GetPostHtml(post) {
   if (post.isLiked) likeImage = "like-active.svg";
 
   let postDateText = post.createdAt;
-  postDateText = formatDistance(post.createdAt, Date.now);
+  postDateText = formatDistance(new Date(), new Date(post.createdAt), {
+    locale: ru,
+    includeSeconds: true,
+  });
   return `<li class="post">
                     <div class="post-header" data-user-id="${post.user.id}">
                         <img src="${
