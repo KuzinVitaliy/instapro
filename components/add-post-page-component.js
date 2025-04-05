@@ -1,4 +1,11 @@
 import { renderHeaderText } from "./header-component.js";
+import {
+  ADD_POSTS_PAGE,
+  AUTH_PAGE,
+  LOADING_PAGE,
+  POSTS_PAGE,
+  USER_POSTS_PAGE,
+} from "../routes.js";
 export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
   const render = () => {
     // @TODO: Реализовать страницу добавления поста
@@ -35,6 +42,7 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
         imageUrl: img.files[0],
         description: cmt.value,
       });
+      goToPage(POSTS_PAGE);
       // description: "Описание картинки",
       // imageUrl: "https://image.png",
     });

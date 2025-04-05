@@ -44,6 +44,11 @@ export function renderPostsPageComponent({ appEl }) {
     userEl.addEventListener("click", async () => {
       console.log(userEl.dataset.isliked);
       console.log(userEl.dataset.postId);
+      let likeCountElement = document.getElementById(
+        `LK${userEl.dataset.postId}`
+      );
+      let likeCount = Number( likeCountElement.innerText.replace("Нравится: ","").trim());
+      
 
       let res = await ChangeLikeAsync(
         userEl.dataset.postId,
@@ -54,10 +59,13 @@ export function renderPostsPageComponent({ appEl }) {
         if (userEl.dataset.isliked == "false") {
           userEl.innerHTML = `<img src="./assets/images/like-active.svg">`;
           userEl.dataset.isliked = "true";
+          likeCount++;
         } else {
           userEl.innerHTML = `<img src="./assets/images/like-not-active.svg">`;
           userEl.dataset.isliked = "false";
+          likeCount--;
         }
+        likeCountElement.innerText = `Нравится: ${likeCount}`;
       }
       /*      let postId = userEl.dataset.postId;
       let url = `http://localhost:3000/api/posts/${postId}`;
@@ -91,7 +99,7 @@ function GetPostHtml(post) {
   }" class="like-button">
                         <img src="./assets/images/${likeImage}">
                       </button>
-                      <p class="post-likes-text">
+                      <p class="post-likes-text" id="LK${post.id}">
                         Нравится: <strong>${getLikeInfo(post.likes)}</strong>
                       </p>
                     </div>
@@ -107,9 +115,14 @@ function GetPostHtml(post) {
 
 function getLikeInfo(likes) {
   if (likes == null || likes.length == 0) return "0";
+  return likes.length;
+
+  /*
+  if (likes == null || likes.length == 0) return "0";
   let res = "";
   likes.map((item) => (res += item.name + "; "));
   return res;
+  */
 }
 
 function postImage({ file }) {

@@ -101,6 +101,7 @@ export async function saveCommentApiAsync(file, comment, token) {
     let res = await uploadImageAsync(file);
     if (res.success) {
       let js = res.fileUrl;
+      comment = comment.response("<", "").response(">", "");
       let response = await fetch(postsHost, {
         method: "POST",
         body: JSON.stringify({ description: comment, imageUrl: js }),
@@ -117,6 +118,7 @@ export async function saveCommentApiAsync(file, comment, token) {
     }
   } catch (error) {
     console.log(error);
+    alert(error);
   }
 }
 
@@ -189,11 +191,14 @@ export async function uploadImageAsync(file) {
   const data = new FormData();
   data.append("file", file);
   try {
-    let content = await fetch(baseHost + "/api/upload/image", {
+    let response = await fetch(baseHost + "/api/upload/image", {
       method: "POST",
       body: data,
     });
-    let json = await content.json();
+    if (response.status !== 200) {
+      throw new Error("Ошибка при загрузке картинки");
+    }
+    let json = await response.json();
     return json;
   } catch (error) {
     console.log(error);
