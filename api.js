@@ -101,7 +101,7 @@ export async function saveCommentApiAsync(file, comment, token) {
     let res = await uploadImageAsync(file);
     if (res.success) {
       let js = res.fileUrl;
-      comment = comment.response("<", "").response(">", "");
+      comment = comment.replace("<", "").replace(">", "");
       let response = await fetch(postsHost, {
         method: "POST",
         body: JSON.stringify({ description: comment, imageUrl: js }),
