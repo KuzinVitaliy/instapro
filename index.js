@@ -3,7 +3,7 @@ import {
   saveCommentApi,
   saveCommentApiAsync,
   getUserPosts,
-} from "./api.js";
+  noLogs} from "./api.js";
 import { renderAddPostPageComponent } from "./components/add-post-page-component.js";
 import { renderAuthPageComponent } from "./components/auth-page-component.js";
 import {
@@ -119,7 +119,9 @@ const renderApp = () => {
       onAddPostClick({ imageUrl, description }) {
         // @TODO: реализовать добавление поста в API
         saveCommentApiAsync(imageUrl, description, getToken());
+          if (!noLogs()) {
         console.log("Добавляю пост...", { description, imageUrl });
+          }
         goToPage(POSTS_PAGE);
       },
     });

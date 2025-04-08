@@ -6,6 +6,9 @@ import {
   POSTS_PAGE,
   USER_POSTS_PAGE,
 } from "../routes.js";
+
+import { goToPage } from "../index.js";
+
 export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
   const render = () => {
     // @TODO: Реализовать страницу добавления поста
@@ -38,6 +41,14 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
       let img = document.getElementById("file");
       let cmt = document.getElementById("comment");
       //     onAddPostClick({ imageUrl: img.value, description: cmt.value });
+      if (
+        cmt.value.length < 1 ||
+        img.files.length <= 0 ||
+        img.files[0].size <= 0
+      ) {
+        alert("Заполните все поля!");
+        return;
+      }
       onAddPostClick({
         imageUrl: img.files[0],
         description: cmt.value,
@@ -54,4 +65,9 @@ export function renderAddPostPageComponent({ appEl, onAddPostClick }) {
   };
 
   render();
+  let f = document.getElementsByClassName("logo");
+  f[0].addEventListener("click", (ff) => {
+    goToPage(POSTS_PAGE);
+  });
+
 }

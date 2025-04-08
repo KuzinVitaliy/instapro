@@ -7,6 +7,14 @@ const baseHost = "https://wedev-api.sky.pro";
 //const baseHost = "https://glebkaf.github.io";
 const postsHost = `${baseHost}/api/v1/${personalKey}/instapro`;
 
+export function noLogs() {
+  return true;
+}
+
+export function writeLog() {
+
+}
+
 export function getPosts({ token }) {
   return fetch(postsHost, {
     method: "GET",
@@ -135,7 +143,7 @@ export function uploadImage(file) {
       return response.json();
     })
     .then((data) => {
-      console.log(data.fileUrl);
+      if (!noLogs()) console.log(data.fileUrl);
     })
     .catch((error) => {
       console.log(error);
@@ -150,7 +158,7 @@ export async function ChangeLike(postId, setLiked, token) {
     },
   }).then((response) => {
     if (response.status === 200) {
-      console.log("Изменение like -  OK");
+      if (!noLogs()) console.log("Изменение like -  OK");
       return true;
     }
     if (response.status === 401) {

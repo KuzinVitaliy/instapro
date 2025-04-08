@@ -5,6 +5,7 @@ import { ChangeLikeAsync } from "../api.js";
 
 import { formatDistance } from "../node_modules/date-fns/formatDistance.js";
 import { ru } from "../node_modules/date-fns/locale/ru.js";
+import { noLogs } from "../api.js";
 
 function formatDistanceF(a, s) {
   return a;
@@ -13,7 +14,9 @@ function formatDistanceF(a, s) {
 export function renderPostsPageComponent({ appEl }) {
   // @TODO: реализовать рендер постов из api
 
-  console.log("Актуальный список постов:", posts);
+  if (!noLogs()) {
+    console.log("Актуальный список постов:", posts);
+  }
 
   /**
    * @TODO: чтобы отформатировать дату создания поста в виде "19 минут назад"
@@ -43,8 +46,10 @@ export function renderPostsPageComponent({ appEl }) {
   }
   for (let userEl of document.querySelectorAll(".like-button")) {
     userEl.addEventListener("click", async () => {
-      console.log(userEl.dataset.isliked);
-      console.log(userEl.dataset.postId);
+      if (!noLogs()) {
+        console.log(userEl.dataset.isliked);
+        console.log(userEl.dataset.postId);
+      }
       let likeCountElement = document.getElementById(
         `LK${userEl.dataset.postId}`
       );
@@ -142,7 +147,9 @@ function postImage({ file }) {
       return response.json();
     })
     .then((data) => {
-      console.log(data.fileUrl);
+      if (!noLogs()) {
+        console.log(data.fileUrl);
+      }
     });
 }
 
