@@ -4,7 +4,7 @@ import { ADD_POSTS_PAGE, AUTH_PAGE, POSTS_PAGE } from "../routes.js";
 /**
  * Компонент заголовка страницы.
  * Этот компонент отображает шапку страницы с логотипом, кнопкой добавления постов/входа и кнопкой выхода (если пользователь авторизован).
- * 
+ *
  * @param {HTMLElement} params.element - HTML-элемент, в который будет рендериться заголовок.
  * @returns {HTMLElement} Возвращает элемент заголовка после рендеринга.
  */
@@ -60,4 +60,17 @@ export function renderHeaderComponent({ element }) {
   element.querySelector(".logout-button")?.addEventListener("click", logout);
 
   return element;
+}
+
+export function renderHeaderText() {
+  return `
+  <div class="page-header">
+      <h1 class="logo">instapro</h1>
+      ${
+        user
+          ? `<button title="${user.name}" class="header-button logout-button">Выйти</button>`
+          : ""
+      }  
+  </div>
+  `;
 }

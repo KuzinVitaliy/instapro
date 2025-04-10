@@ -1,4 +1,4 @@
-import { uploadImage } from "../api.js";
+import { uploadImage, uploadImageAsync } from "../api.js";
 
 /**
  * Компонент загрузки изображения.
@@ -19,7 +19,7 @@ export function renderUploadImageComponent({ element, onImageUrlChange }) {
 
   /**
    * Функция рендеринга компонента.
-   * Отображает интерфейс компонента в зависимости от состояния: 
+   * Отображает интерфейс компонента в зависимости от состояния:
    * либо форма выбора файла, либо превью загруженного изображения с кнопкой замены.
    */
   const render = () => {
@@ -49,15 +49,15 @@ export function renderUploadImageComponent({ element, onImageUrlChange }) {
 
     // Обработчик выбора файла
     const fileInputElement = element.querySelector(".file-upload-input");
-    fileInputElement?.addEventListener("change", () => {
+    fileInputElement?.addEventListener("change", async () => {
       const file = fileInputElement.files[0];
       if (file) {
         const labelEl = document.querySelector(".file-upload-label");
         labelEl.setAttribute("disabled", true);
         labelEl.textContent = "Загружаю файл...";
-        
+
         // Загружаем изображение с помощью API
-        uploadImage({ file }).then(({ fileUrl }) => {
+        await uploadImageAsync(file).then(({ fileUrl }) => {
           imageUrl = fileUrl; // Сохраняем URL загруженного изображения
           onImageUrlChange(imageUrl); // Уведомляем о изменении URL изображения
           render(); // Перерисовываем компонент с новым состоянием
